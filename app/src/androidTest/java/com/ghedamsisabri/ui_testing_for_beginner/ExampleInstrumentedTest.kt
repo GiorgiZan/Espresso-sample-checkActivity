@@ -5,6 +5,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.ghedamsisabri.ui_testing_for_beginner.Helper.assertIsViewDisplayed
 import com.ghedamsisabri.ui_testing_for_beginner.Helper.getText
 import com.ghedamsisabri.ui_testing_for_beginner.Helper.isTextOnScreen
 import com.ghedamsisabri.ui_testing_for_beginner.Helper.isViewDisplayed
@@ -25,16 +26,29 @@ class ExampleInstrumentedTest {
     @get:Rule var activityScenarioRule = activityScenarioRule<MainActivity>()
 
     @Test
-    fun checkSecondPage() {
+    fun checkMainAndSecondPage() {
+        mainPage.assertIsViewDisplayed()
         NextBtn.tap()
-        secondPageActivity.isViewDisplayed()
+        secondPageTitle.assertIsViewDisplayed()
+        Assert.assertTrue(isTextOnScreen("SecondaryActivity"))
+        BackBtn.assertIsViewDisplayed()
+    }
 
-        isTextOnScreen("SecondaryActivity")
-        Assert.assertEquals("SecondaryActivity", secondPageActivity.getText(5))
+    @Test
+    fun checkSecondPage1() {
+        mainPage.assertIsViewDisplayed()
+        NextBtn.tap()
+        BackBtn.tap()
+        Assert.assertTrue(isTextOnScreen("MainActivity"))
+        NextBtn.assertIsViewDisplayed()
+
     }
 
     companion object{
+        val mainPage: Matcher<View> by lazy { withId(R.id.main) }
+        val mainPageTitle: Matcher<View> by lazy { withId(R.id.activity_main_title) }
         val NextBtn: Matcher<View> by lazy { withId(R.id.button_next_activity) }
-        val secondPageActivity: Matcher<View> by lazy { withId(R.id.activity_secondary_title) }
+        val BackBtn: Matcher<View> by lazy { withId(R.id.button_back) }
+        val secondPageTitle: Matcher<View> by lazy { withId(R.id.activity_secondary_title) }
     }
 }
